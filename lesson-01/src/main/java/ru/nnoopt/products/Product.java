@@ -2,11 +2,11 @@ package ru.nnoopt.products;
 
 public class Product {
 
-    private long id;
+    private Long id;
     private String title;
     private double cost;
 
-    public Product(long id, String title, double cost) {
+    public Product(Long id, String title, double cost) {
         this.id = id;
         this.title = title;
         this.cost = cost;
@@ -24,7 +24,7 @@ public class Product {
         return cost;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
