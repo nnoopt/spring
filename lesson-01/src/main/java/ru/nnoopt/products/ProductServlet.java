@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @WebServlet(urlPatterns = "/product/*")
@@ -14,23 +17,55 @@ public class ProductServlet extends HttpServlet {
 
     private ProductRepository productRepository;
 
+    private static final Pattern PARAM_PATTERN = Pattern.compile("\\/(\\d+)");
+
     @Override
     public void init() throws ServletException {
-        this.productRepository = new ProductRepository();
-        this.productRepository.insert(new Product(1L, "Bread", 63L));
-        this.productRepository.insert(new Product(2L, "Bread", 63L));
-        this.productRepository.insert(new Product(3L, "Bread", 63L));
-        this.productRepository.insert(new Product(4L, "Bread", 63L));
-        this.productRepository.insert(new Product(5L, "Bread", 63L));
-        this.productRepository.insert(new Product(6L, "Bread", 63L));
-        this.productRepository.insert(new Product(7L, "Bread", 63L));
-        this.productRepository.insert(new Product(8L, "Bread", 63L));
-        this.productRepository.insert(new Product(9L, "Bread", 63L));
-        this.productRepository.insert(new Product(10L, "Bread", 63L));
+        this.productRepository = (ProductRepository) getServletContext().getAttribute("productRepository");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        if(req.getPathInfo() == null || req.equals("/")) {
+
+            PrintWriter wr = resp.getWriter();
+            wr.println("<table>");
+            wr.println("<tr>");
+            wr.println("<tr>");
+            wr.println("<th>Id<th>");
+            wr.println("<th>Product<th>");
+            wr.println("<th>Cost<th>");
+            wr.println("</tr>");
+
+            for (Product product : productRepository.findAll()) {
+                wr.println("<tr>");
+                wr.println("<td><a href='" + getServletContext().getContextPath() + "/product/" + product.getId() + "'>" + product.getId() + "</a></td>");
+                wr.println("<td>" + product.getTitle() + "</td>");
+                wr.println("<td>" + product.getCost() + "</td>");
+                wr.println("</tr>");
+            }
+
+            wr.println("</table>");
+
+        }else {
+            Matcher matcher =  PARAM_PATTERN.matcher(req.getPathInfo());
+            if(matcher.matches()){
+                long id = Long.parseLong(matcher.group(1));
+                Product product = this.productRepository.findById(id);
+                if (product == null){
+                    resp.getWriter().println("<p> Product not found </p>");
+                    resp.setStatus(404);
+                    return;
+                }
+
+                resp.getWriter().println("<p>Id: " + product.getId() + "</p>");
+                resp.getWriter().println("<p>Product: " + product.getTitle() + "</p>");
+                resp.getWriter().println("<p>Cost: " + product.getCost() + "</p>");
+            } else {
+                resp.getWriter().println("<p> Bad parameters </p>");
+                resp.setStatus(400);
+            }
+        }
     }
 }

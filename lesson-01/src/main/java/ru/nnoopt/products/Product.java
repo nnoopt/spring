@@ -6,8 +6,7 @@ public class Product {
     private String title;
     private double cost;
 
-    public Product(Long id, String title, double cost) {
-        this.id = id;
+    public Product(String title, double cost) {
         this.title = title;
         this.cost = cost;
     }

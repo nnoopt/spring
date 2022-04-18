@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ProductRepository {
     private Map<Long, Product> productMap = new ConcurrentHashMap<>();
 
-    private AtomicLong identity = new AtomicLong(0);
+    private final AtomicLong identity = new AtomicLong(0);
     public List<Product> findAll (){
         return new ArrayList<>(productMap.values());
     }
