@@ -1,4 +1,4 @@
-package ru.nnoopt.products;
+package ru.nnoopt;
 
 public class Product {
 
@@ -6,9 +6,12 @@ public class Product {
     private String title;
     private double cost;
 
-    public Product(String title, double cost) {
+    private String consistency;
+
+    public Product(String title, double cost, String consistency) {
         this.title = title;
         this.cost = cost;
+        this.consistency = consistency;
     }
 
     public long getId() {
@@ -33,5 +36,13 @@ public class Product {
 
     public void setCost(double cost) {
         this.cost = cost;
+    }
+
+    public String getConsistency() {
+        return consistency;
+    }
+
+    public void setConsistency(String consistency) {
+        this.consistency = consistency;
     }
 }

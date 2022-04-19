@@ -1,4 +1,6 @@
-package ru.nnoopt.products;
+package ru.nnoopt;
+
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +8,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class ProductRepository {
+
+@Repository
+public class ProductRepositoryImpl implements ProductRepository {
     private Map<Long, Product> productMap = new ConcurrentHashMap<>();
 
     private final AtomicLong identity = new AtomicLong(0);
@@ -31,5 +35,9 @@ public class ProductRepository {
 
     public void delete (long id){
         productMap.remove(id);
+    }
+
+    public long getCount(){
+        return productMap.size();
     }
 }
